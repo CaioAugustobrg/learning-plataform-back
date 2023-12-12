@@ -1,9 +1,9 @@
 export interface IMessage {
-  to: string
-  from: string
-  subject: string
-  html: any
-  amp: boolean
+  readonly to: string
+  readonly from: string
+  readonly subject: string
+  readonly html: any
+  readonly amp: boolean
 }
 
 export interface IMailProvider {
