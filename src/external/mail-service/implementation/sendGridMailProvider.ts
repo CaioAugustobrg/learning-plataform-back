@@ -1,5 +1,5 @@
 import sgMail from '@sendgrid/mail'
-import { type IMessage } from '../IMailProvider'
+import { type IMessage } from '../../../usecases/ports/mail-service'
 
 class EmailSender {
   constructor (private readonly apiKey: string) {
