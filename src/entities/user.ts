@@ -1,6 +1,5 @@
 import { Entity } from '../core/domain/Entity'
 export interface UserProps {
-  googleId?: string
   cpf: string
   name: string
   email: string
@@ -20,7 +19,6 @@ export interface UserProps {
 }
 
 export class User extends Entity<UserProps> {
-  public googleId?: string
   public cpf: string
   public name: string
   public email: string
@@ -40,7 +38,6 @@ export class User extends Entity<UserProps> {
 
   public constructor (props: UserProps) {
     super()
-    this.googleId = props.googleId
     this.cpf = props.cpf
     this.name = props.name
     this.email = props.email
