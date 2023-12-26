@@ -5,4 +5,5 @@ export interface UserRepository {
   create: (user: User, roleName: string) => Promise<string | null>
   findUserByEmail: (email: string) => Promise<User | null>
   findUserByPhone: (phone: string) => Promise<User | null>
+  findUserByRegisterDocument: (registerDocument: string) => Promise<User | null>
 }
