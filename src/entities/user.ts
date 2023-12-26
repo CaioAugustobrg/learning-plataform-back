@@ -11,7 +11,7 @@ export interface UserProps {
   speciality?: string | null
   education?: string | null
   systemRole: 'CREATED'
-  userRegisterDocument?: string | null
+  userRegisterDocument?: string
   userToken?: string | null
   cep?: string | null
   professionalExperience?: string | null
@@ -30,7 +30,7 @@ export class User extends Entity<UserProps> {
   public speciality?: string | null
   public education?: string | null
   public systemRole: 'CREATED'
-  public userRegisterDocument?: string | null
+  public userRegisterDocument?: string
   public userToken?: string | null
   public cep?: string | null
   public professionalExperience?: string | null
