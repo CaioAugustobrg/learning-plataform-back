@@ -4,6 +4,12 @@ import { PrismaHelper } from '../prisma/helpers/prisma-helper'
 import bcrypt from 'bcrypt'
 
 export class PrismaUserRepository implements UserRepository {
+  async findUserByRegisterDocument (registerDocument?: string): Promise<User | null> {
+    return (PrismaHelper?.user.findUnique({
+      where: { registerDocument }
+    })) as User | null
+  }
+
   async findUserByCpf (cpf: string): Promise<User | null> {
     return (PrismaHelper?.user?.findUnique({
       where: { cpf }
