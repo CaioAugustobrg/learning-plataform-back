@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { type UserRepository } from '../../../usecases/ports/user-repository'
 import { User } from '../../../entities/user'
 import { PrismaHelper } from '../prisma/helpers/prisma-helper'
@@ -8,6 +10,19 @@ export class PrismaUserRepository implements UserRepository {
     return (PrismaHelper?.user.findUnique({
       where: { registerDocument }
     })) as User | null
+  }
+
+  async login (email: string, password: string): Promise<User | null> {
+    const user = await PrismaHelper?.user.findUnique({
+      where: { email }
+    })
+    if (user) {
+      const isMatch = await bcrypt.compare(password, user.password)
+      if (isMatch) {
+        return user
+      }
+    }
+    return null
   }
 
   async findUserByCpf (cpf: string): Promise<User | null> {
