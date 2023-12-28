@@ -2,13 +2,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type Request, type Response } from 'express'
-import { type CreateUserProfessorUseCase } from '../usecases/create-user-professor/create-user-professor'
-import { type CreateUserStudentUseCase } from '../usecases/create-user-student/create-user-student'
+import { type CreateUserUseCase } from '../usecases/create-user/create-user'
 
 export class CreateUserController {
   constructor (
-    private readonly createUserStudentUseCase: CreateUserStudentUseCase,
-    private readonly createUserProfessorUseCase: CreateUserProfessorUseCase
+    private readonly createUserStudentUseCase: CreateUserUseCase
   ) {}
 
   async handle (
@@ -52,7 +50,7 @@ export class CreateUserController {
             msg: 'Todos os campos são obrigatórios'
           })
         }
-        const httpResponse = await this.createUserProfessorUseCase.handle(
+        const httpResponse = await this.createUserStudentUseCase.handle(
           httpRequest.body,
           roleName
         )
