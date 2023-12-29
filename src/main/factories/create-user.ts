@@ -1,7 +1,7 @@
-import { CreateUserController } from '../controllers/create-user-controller'
-import { CreateUserUseCase } from '../usecases/create-user/create-user'
-import { PrismaUserRepository } from '../external/repositories/prisma/prisma-user-repository'
-import EmailSender from '../external/mail-service/implementation/sendGridMailProvider'
+import { CreateUserController } from '../../controllers/create-user'
+import { CreateUserUseCase } from '../../usecases/create-user/create-user'
+import { PrismaUserRepository } from '../../external/repositories/prisma/prisma-user-repository'
+import EmailSender from '../../external/mail-service/implementation/sendGridMailProvider'
 
 const prismaUserRepository = new PrismaUserRepository()
 // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style

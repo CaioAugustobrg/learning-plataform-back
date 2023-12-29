@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { PasswordRecoveryController } from '../controllers/password-recovery-controller'
-import { PrismaPasswordRecoveryRepository } from '../external/repositories/prisma/prisma-password-recovery-repository'
-import EmailSender from '../external/mail-service/implementation/sendGridMailProvider'
-import { TryRecoveryPasswordUseCase } from '../usecases/try-recover-password/try-recover-password'
-import { PasswordRecoveryUseCase } from '../usecases/password-recovery/password-recovery'
+import { PasswordRecoveryController } from '../../controllers/password-recovery'
+import { PrismaPasswordRecoveryRepository } from '../../external/repositories/prisma/prisma-password-recovery-repository'
+import EmailSender from '../../external/mail-service/implementation/sendGridMailProvider'
+import { TryRecoveryPasswordUseCase } from '../../usecases/try-recover-password/try-recover-password'
+import { PasswordRecoveryUseCase } from '../../usecases/password-recovery/password-recovery'
 
 const prismaPasswordRecoveryRepository = new PrismaPasswordRecoveryRepository()
 const emailSender = new EmailSender(process.env.SENDGRID_API_KEY!)
