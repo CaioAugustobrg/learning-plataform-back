@@ -5,17 +5,17 @@ import { type User } from '../../entities/user'
 import { type PrismaUserRepository } from '../../external/repositories/prisma/prisma-user-repository'
 import bcrypt from 'bcrypt'
 
-export class UserLoginService {
+export class UserLoginUseCase {
   constructor (
     private readonly prismaUserLogin: PrismaUserRepository
   ) {}
 
-  async handle (httpRequest: {
-    email: string
+  async handle (
+    email: string,
     password: string
-  }): Promise<User | null> {
+  ): Promise<User | null> {
     const findUserByEmail =
-      await this.prismaUserLogin.findUserByEmail(httpRequest.email)
+      await this.prismaUserLogin.findUserByEmail(email)
 
     if (!findUserByEmail) {
       throw new ApiError({
@@ -25,7 +25,7 @@ export class UserLoginService {
     }
 
     const passwordMatch = await bcrypt.compare(
-      httpRequest.password,
+      password,
       findUserByEmail.password
     )
 
