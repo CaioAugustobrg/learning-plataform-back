@@ -11,28 +11,30 @@ datasource db {
 }
 
 model User {
-  id                     String             @id @default(uuid())
-  googleId               String?            @unique
-  cpf                    String             @unique
+  id                     String                @id @default(uuid())
+  googleId               String?               @unique
+  cpf                    String                @unique
   name                   String
-  email                  String             @unique
-  phone                  String             @unique
+  email                  String                @unique
+  phone                  String                @unique
   password               String
   birthDate              DateTime
-  createdAt              DateTime           @default(now())
+  createdAt              DateTime              @default(now())
   userRole               UserRole?
   picture                String?
   speciality             String?
   education              String?
-  systemRole             UserSystemRole     @default(CREATED)
+  systemRole             UserSystemRole        @default(CREATED)
   passwordRecovery       PasswordRecovery[]
-  userRegisterDocument   String?            @unique
+  userRegisterDocument   String?               @unique
   userToken              String?
   cep                    String?
-  updateAt               DateTime           @default(now())
+  updateAt               DateTime              @default(now())
   professionalExperience String?
   professionalGoal       String?
-  lastLoggedIn           DateTime?          @default(now())
+  lastLoggedIn           DateTime?             @default(now())
+  userProfessorCourse    UserProfessorCourse[]
+  userStudentCourse      UserStudentCourse[]
 }
 
 model UserRole {
@@ -62,4 +64,70 @@ model PasswordRecovery {
 
 enum UserSystemRole {
   CREATED
+}
+
+enum CourseMode {
+  ONLINE
+  INPERSON
+}
+
+model Course {
+  id                String              @id @default(uuid())
+  title             String              @unique
+  userProfessorCourse      UserProfessorCourse[]
+  userStudentCourse      UserStudentCourse[]
+  courseClass       CourseClass[]
+  type              CourseMode?
+  summary           String?
+  time              Int?
+  price             Float?
+  currentlyYear     DateTime  @default(now())
+  courseCategorie   String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now())
+}
+
+model CourseClass {
+  id          String            @id @default(uuid())
+  numberClass Int               @default(autoincrement())
+  course      Course            @relation(fields: [courseId], references: [id])
+  courseId    String
+  free        Boolean
+  classText   ClassFormatText[]
+  format      ClassFormat?
+  createdAt   DateTime          @default(now())
+}
+
+enum ClassFormat {
+  TEXT
+  VIDEO
+}
+
+model UserProfessorCourse {
+ id       String @id @default(uuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
+  createdAt  DateTime     @default(now())
+}
+
+model UserStudentCourse {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String
+  createdAt DateTime @default(now())
+}
+
+model ClassFormatText {
+  id            String       @id @default(uuid())
+  title         String
+  bodyText      String
+  free          Boolean
+  numberClass   Int
+  courseClass   CourseClass? @relation(fields: [courseClassId], references: [id])
+  courseClassId String?
+  createdAt     DateTime     @default(now())
 }
