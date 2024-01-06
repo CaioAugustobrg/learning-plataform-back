@@ -25,18 +25,11 @@ export class CreateCourseController {
             msg: 'Todos os campos são obrigatórios'
           })
     }
-    // if ((type !== 'INPERSON') || (type !== 'ONLINE')) {
-    //     return response.status(400).json({
-    //         msg: "Type deve ser 'INPERSON' ou 'ONLINE'"
-    //     })
-    // } else {
       try {
         const httpResponse = await this.createCourseUseCase.handle(httpRequest.body, request.params.userProfesorId)
         return response.status(201).json(httpResponse)
       } catch (error: any) {
         return response.status(error.code || 500).json(error.message)
       }
-
-       //  }
   }
 }
