@@ -1,5 +1,6 @@
 import { Entity } from '../core/domain/Entity'
 export interface UserProps {
+  googleId?: string
   cpf: string
   name: string
   email: string
@@ -7,18 +8,19 @@ export interface UserProps {
   password: string
   birthDate: Date
   userRole?: any
-  picture?: string | null
-  speciality?: string | null
-  education?: string | null
+  picture?: string
+  speciality?: string
+  education?: string
   systemRole: 'CREATED'
   userRegisterDocument?: string
-  userToken?: string | null
-  cep?: string | null
-  professionalExperience?: string | null
-  professionalGoal?: string | null
+  userToken?: string
+  cep?: string
+  professionalExperience?: string
+  professionalGoal?: string
 }
 
 export class User extends Entity<UserProps> {
+  public googleId?: string
   public cpf: string
   public name: string
   public email: string
@@ -26,18 +28,19 @@ export class User extends Entity<UserProps> {
   public password: string
   public birthDate: Date
   public userRole?: any
-  public picture?: string | null
-  public speciality?: string | null
-  public education?: string | null
+  public picture?: string
+  public speciality?: string
+  public education?: string
   public systemRole: 'CREATED'
   public userRegisterDocument?: string
-  public userToken?: string | null
-  public cep?: string | null
-  public professionalExperience?: string | null
-  public professionalGoal?: string | null
+  public userToken?: string
+  public cep?: string
+  public professionalExperience?: string
+  public professionalGoal?: string
 
   public constructor (props: UserProps) {
     super()
+    this.googleId = props.googleId
     this.cpf = props.cpf
     this.name = props.name
     this.email = props.email
