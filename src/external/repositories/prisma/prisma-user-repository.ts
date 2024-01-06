@@ -8,8 +8,8 @@ import bcrypt from 'bcrypt'
 export class PrismaUserRepository implements UserRepository {
   async findUserByRegisterDocument (registerDocument?: string): Promise<User | null> {
     return (PrismaHelper?.user.findUnique({
-      where: { registerDocument }
-    })) as User | null
+      where: { userRegisterDocument: registerDocument }
+    })) as unknown as User | null
   }
 
   async login (email: string, password: string): Promise<User | null> {
@@ -19,7 +19,7 @@ export class PrismaUserRepository implements UserRepository {
     if (user) {
       const isMatch = await bcrypt.compare(password, user.password)
       if (isMatch) {
-        return user
+        return user as User
       }
     }
     return null
@@ -28,22 +28,28 @@ export class PrismaUserRepository implements UserRepository {
   async findUserByCpf (cpf: string): Promise<User | null> {
     return (PrismaHelper?.user?.findUnique({
       where: { cpf }
-    })) as User | null
+    })) as unknown as User | null
   }
 
   async findUserByEmail (email: string): Promise<User | null> {
     return (PrismaHelper?.user?.findUnique({
       where: { email }
-    })) as User | null
+    })) as unknown as User | null
   }
 
   async findUserByPhone (phone: string): Promise<User | null> {
     return (PrismaHelper?.user?.findUnique({
       where: { phone }
-    })) as User | null
+    })) as unknown as User | null
   }
 
-  async create (user: User, roleName: string): Promise<string | null> {
+  async findUserById (userProfesorId: string): Promise<User | null> {
+    return (PrismaHelper?.user?.findUnique({
+      where: { id: userProfesorId }
+    })) as unknown as User | null
+  }
+
+  async create (user: User, roleName: string): Promise<User | null> {
     const createUser = new User(user)
     const userPasswordHash = await bcrypt.hash(createUser.password, 8)
 
@@ -56,7 +62,8 @@ export class PrismaUserRepository implements UserRepository {
         phone: createUser.phone,
         password: userPasswordHash,
         birthDate: createUser.birthDate,
-        speciality: createUser.speciality
+        speciality: createUser.speciality,
+        createdAt: createUser.createdAt
 
       }
     })
@@ -65,7 +72,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { name: roleName }
     })
     // eslint-disable-next-line no-extra-boolean-cast
-    if (!(Boolean(findRole))) {
+    if (!findRole) {
       return null
     }
 
@@ -77,7 +84,7 @@ export class PrismaUserRepository implements UserRepository {
     })
     // eslint-disable-next-line no-extra-boolean-cast
     if (Boolean(createRole)) {
-      return 'Usuário criado com sucesso'
+      return createUser
     }
     return null
   }
