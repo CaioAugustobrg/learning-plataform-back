@@ -28,11 +28,24 @@ export class InMemoryUserRepository implements UserRepository {
     return null
   }
 
-  async create (user: User): Promise<void> {
+  async findUserById (userProfesorId: string): Promise<User | null> {
+    let user: User
+    for (user of this.users) {
+      if (user.id === userProfesorId) {
+        return user
+      }
+    }
+    return null
+  }
+
+  async create (user: User): Promise<User | null> {
     const existsByCpf = await this.findUserByCpf(user.cpf)
     const existsByEmail = await this.findUserByEmail(user.email)
     if (!existsByCpf && !existsByEmail) {
       this.users.push(user)
+      return user
+    } else {
+      return null
     }
   }
 
