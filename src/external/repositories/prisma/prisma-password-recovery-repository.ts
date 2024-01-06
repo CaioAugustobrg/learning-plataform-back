@@ -11,20 +11,20 @@ export class PrismaPasswordRecoveryRepository implements PasswordRecoveryReposit
         userId: passwordRecovery.userId,
         expiration: passwordRecovery.expiration
       }
-    })) as PasswordRecovery
+    })) as unknown as PasswordRecovery
   }
 
   async findUserByEmail (email: string): Promise<User | null> {
     return (PrismaHelper?.user.findUnique({
       where: { email }
-    })) as User | null
+    })) as unknown as User | null
   }
 
   async findToken (userToken: string): Promise<PasswordRecovery | null> {
     return (PrismaHelper?.passwordRecovery.findFirst({
-      where: { userToken },
+      where: { token: userToken },
       orderBy: { expiration: 'desc' }
-    })) as PasswordRecovery | null
+    })) as unknown as PasswordRecovery | null
   }
 
   async updatePassword (
