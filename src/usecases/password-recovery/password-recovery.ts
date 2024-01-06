@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid'
 import { type HttpResponse } from '../../controllers/ports/http'
 import { PasswordRecovery } from '../../entities/password-recovery'
 import type EmailSender from '../../external/mail-service/implementation/sendGridMailProvider'
@@ -7,6 +6,7 @@ import ApiError from '../../utils/apiError'
 import { type IMessage } from '../ports/mail-service'
 import { ok } from '../../controllers/helpers/http-helper'
 import mjml2html from 'mjml'
+import { v4 as uuidv4 } from 'uuid'
 
 export class PasswordRecoveryUseCase {
   constructor (
@@ -21,7 +21,7 @@ export class PasswordRecoveryUseCase {
   ): Promise<HttpResponse> {
     const expiration = new Date()
     expiration.setMinutes(expiration.getMinutes() + 30)
-    const token = nanoid()
+    const token = uuidv4()
     const getUser = await this.prismaPasswordRecoveryRepository.findUserByEmail(HttpRequest.email)
     if (getUser === null) {
       throw new ApiError({
