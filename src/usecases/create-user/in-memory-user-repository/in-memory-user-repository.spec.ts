@@ -26,7 +26,7 @@ describe('In memory user repository', () => {
     userRepo = new InMemoryUserRepository(users)
   })
 
-  it('should call a method when finding a user by email', async () => {
+  it('should call a method when finding an user by email', async () => {
     const spy = jest.spyOn(userRepo, 'findUserByEmail')
     const user = await userRepo.findUserByEmail('usuario@email.com')
     expect(spy).toHaveBeenCalledTimes(1)
