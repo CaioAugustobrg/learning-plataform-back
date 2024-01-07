@@ -1,7 +1,8 @@
 import { PrismaCourseRepository } from '../../external/repositories/prisma/prisma-course-repository'
-import { CreateCourseController } from '../../controllers/create-course'
+import { CourseController } from '../../controllers/course-controller'
 import { CreateCourseUseCase } from '../../usecases/create-course/create-course'
 import { PrismaUserRepository } from '../../external/repositories/prisma/prisma-user-repository'
+import { FindAllCoursesUseCase } from '../../usecases/find-all-courses/find-all-courses'
 
 const prismaCourseRepository = new PrismaCourseRepository()
 const prismaUserRepository = new PrismaUserRepository()
@@ -9,7 +10,11 @@ const createCourseUseCase = new CreateCourseUseCase(
   prismaCourseRepository,
   prismaUserRepository
 )
-const createCourseController = new CreateCourseController(
-  createCourseUseCase
+const findAllCourses = new FindAllCoursesUseCase(
+  prismaCourseRepository
 )
-export { createCourseController }
+const courseController = new CourseController(
+  createCourseUseCase,
+  findAllCourses
+)
+export { courseController }
