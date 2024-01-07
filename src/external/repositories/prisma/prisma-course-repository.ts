@@ -34,8 +34,12 @@ export class PrismaCourseRepository implements CourseRepository {
   }
 
   async findCourseByTitle (title: string): Promise<Course | null> {
-    return (PrismaHelper?.course?.findUnique({
+    return (await PrismaHelper?.course?.findUnique({
       where: { title }
     })) as unknown as Course | null
+  }
+
+  async findAll (): Promise<Course[] | null> {
+    return (await PrismaHelper?.course.findMany()) as unknown as Course[] | null
   }
 }
