@@ -13,8 +13,8 @@ AdminRouter.post(
 
 AdminRouter.get(
   '/course/find-all',
-  async (response: Response) => {
-    return await courseController.getAllCourses(response)
+  async (request: Request, response: Response) => {
+    return await courseController.getAllCourses(request, response)
   }
 )
 export default AdminRouter
