@@ -16,7 +16,7 @@ export class FindAllCoursesUseCase {
         message: 'Nenhum curso encontrado'
       })
     } else {
-      return findAllCourses
+      return findAllCourses as unknown as Course[]
     }
   }
 }
