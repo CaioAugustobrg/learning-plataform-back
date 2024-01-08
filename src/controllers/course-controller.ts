@@ -35,7 +35,7 @@ export class CourseController {
     }
   }
 
-  async getAllCourses (response: Response) {
+  async getAllCourses (request: Request, response: Response) {
     try {
       const httpResponse = await this.findAllCourses.handle()
       return response.status(200).json(httpResponse)
