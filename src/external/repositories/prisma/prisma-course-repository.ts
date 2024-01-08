@@ -40,6 +40,11 @@ export class PrismaCourseRepository implements CourseRepository {
   }
 
   async findAll (): Promise<Course[] | null> {
-    return (await PrismaHelper?.course.findMany()) as unknown as Course[] | null
+    const findAllCourse = await PrismaHelper.course.findMany({})
+    if (findAllCourse) {
+      return findAllCourse as unknown as Course[]
+    } else {
+      return null
+    }
   }
 }
