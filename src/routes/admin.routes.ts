@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express, { type Request, type Response } from 'express'
-import { courseController } from '../main/factories/create-course'
+import { courseController } from '../main/factories/course'
 
 const AdminRouter = express.Router()
 
@@ -17,4 +17,12 @@ AdminRouter.get(
     return await courseController.getAllCourses(request, response)
   }
 )
+
+AdminRouter.delete(
+  'course/delete',
+  async (request: Request, response: Response) => {
+    return await courseController.deleteCourse(request, response)
+  }
+)
+
 export default AdminRouter
