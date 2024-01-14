@@ -47,4 +47,20 @@ export class PrismaCourseRepository implements CourseRepository {
       return null
     }
   }
+
+  async deleteCourse (courseId: string): Promise<void> {
+    await PrismaHelper.course.delete({
+      where: {
+        id: courseId
+      }
+    })
+  }
+
+  async findCourseById (courseId: string): Promise<Course | null> {
+    return (await PrismaHelper.course.findUnique({
+      where: {
+        id: courseId
+      }
+    })) as unknown as Course | null
+  }
 }
