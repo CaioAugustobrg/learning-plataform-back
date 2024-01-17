@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type Request, type Response } from 'express'
-import { type CreateCourseUseCase } from '../usecases/create-course/create-course'
-import { type FindAllCoursesUseCase } from '../usecases/find-all-courses/find-all-courses'
-import { type DeleteCourseUseCase } from '../usecases/delete-course/delete-course'
+import { type CreateCourseUseCase } from '../usecases/course/create-course/create-course'
+import { type FindAllCoursesUseCase } from '../usecases/course/find-all-courses/find-all-courses'
+import { type DeleteCourseUseCase } from '../usecases/course/delete-course/delete-course'
 // import { MissingParamError } from './errors'
 
 export class CourseController {
