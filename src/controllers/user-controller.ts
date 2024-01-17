@@ -3,19 +3,21 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type Request, type Response } from 'express'
-import { type CreateUserUseCase } from '../usecases/create-user/create-user'
-import { type UserLoginUseCase } from '../usecases/user-login/user-login'
+import { type CreateUserUseCase } from '../usecases/user/create-user/create-user'
+import { type UserLoginUseCase } from '../usecases/user/user-login/user-login'
 import { type HttpRequest } from './ports/http'
 import jwt from 'jsonwebtoken'
-import { type TryRecoveryPasswordUseCase } from '../usecases/try-recover-password/try-recover-password'
-import { type PasswordRecoveryUseCase } from '../usecases/password-recovery/password-recovery'
+import { type TryRecoveryPasswordUseCase } from '../usecases/user/try-recover-password/try-recover-password'
+import { type PasswordRecoveryUseCase } from '../usecases/user/password-recovery/password-recovery'
+import { type DeleteUserUseCase } from '../usecases/user/delete-user/delete-user'
 
 export class UserController {
   constructor (
     private readonly createUserStudentUseCase: CreateUserUseCase,
     private readonly userLoginService: UserLoginUseCase,
     private readonly forgotPasswordUseCase: PasswordRecoveryUseCase,
-    private readonly tryRecoveryPasswordUseCase: TryRecoveryPasswordUseCase
+    private readonly tryRecoveryPasswordUseCase: TryRecoveryPasswordUseCase,
+    private readonly deleteUserById: DeleteUserUseCase
   ) {}
 
   async createUser (
@@ -133,6 +135,15 @@ export class UserController {
         )
         return response.status(200).send('Senha alterada com sucesso!')
       }
+    } catch (error: any) {
+      return response.status(error.code || 500).json(error.message)
+    }
+  }
+
+  async deleteUser (request: Request, response: Response) {
+    const { userId } = request.body
+    try {
+      await this.deleteUserById.handle(userId)
     } catch (error: any) {
       return response.status(error.code || 500).json(error.message)
     }
