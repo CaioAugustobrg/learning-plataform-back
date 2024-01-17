@@ -1,9 +1,9 @@
 import { PrismaCourseRepository } from '../../external/repositories/prisma/prisma-course-repository'
 import { CourseController } from '../../controllers/course-controller'
-import { CreateCourseUseCase } from '../../usecases/create-course/create-course'
+import { CreateCourseUseCase } from '../../usecases/course/create-course/create-course'
 import { PrismaUserRepository } from '../../external/repositories/prisma/prisma-user-repository'
-import { FindAllCoursesUseCase } from '../../usecases/find-all-courses/find-all-courses'
-import { DeleteCourseUseCase } from '../../usecases/delete-course/delete-course'
+import { FindAllCoursesUseCase } from '../../usecases/course/find-all-courses/find-all-courses'
+import { DeleteCourseUseCase } from '../../usecases/course/delete-course/delete-course'
 
 const prismaCourseRepository = new PrismaCourseRepository()
 const prismaUserRepository = new PrismaUserRepository()
