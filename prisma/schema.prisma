@@ -13,25 +13,26 @@ datasource db {
 model User {
   id                     String                @id @default(uuid())
   googleId               String?               @unique
-  cpf                    String                @unique
+  githubId               String?               @unique
+  // cpf                    String                @unique
   name                   String
   email                  String                @unique
-  phone                  String                @unique
-  password               String
-  birthDate              DateTime
+  phone                  String?                @unique
+  password               String?
+  birthDate              DateTime?
   createdAt              DateTime              @default(now())
   userRole               UserRole?
   picture                String?
-  speciality             String?
-  education              String?
+  // speciality             String?
+  // education              String?
   systemRole             UserSystemRole        @default(CREATED)
   passwordRecovery       PasswordRecovery[]
   userRegisterDocument   String?               @unique
   userToken              String?
   cep                    String?
   updateAt               DateTime              @default(now())
-  professionalExperience String?
-  professionalGoal       String?
+  // professionalExperience String?
+  // professionalGoal       String?
   lastLoggedIn           DateTime?             @default(now())
   userProfessorCourse    UserProfessorCourse[]
   userStudentCourse      UserStudentCourse[]
