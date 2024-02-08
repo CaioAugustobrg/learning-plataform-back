@@ -17,19 +17,21 @@ export class PrismaUserRepository implements UserRepository {
       where: { email }
     })
     if (user) {
-      const isMatch = await bcrypt.compare(password, user.password)
-      if (isMatch) {
-        return user as User
+      if (user.password) {
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (isMatch) {
+          return user as User
+        }
       }
     }
     return null
   }
 
-  async findUserByCpf (cpf: string): Promise<User | null> {
-    return (PrismaHelper?.user?.findUnique({
-      where: { cpf }
-    })) as unknown as User | null
-  }
+  // async findUserByCpf (cpf: string): Promise<User | null> {
+  //   return (PrismaHelper?.user?.findUnique({
+  //     where: { cpf }
+  //   })) as unknown as User | null
+  // }
 
   async findUserByEmail (email: string): Promise<User | null> {
     return (PrismaHelper?.user?.findUnique({
@@ -51,18 +53,20 @@ export class PrismaUserRepository implements UserRepository {
 
   async create (user: User, roleName: string): Promise<User | null> {
     const createUser = new User(user)
-    const userPasswordHash = await bcrypt.hash(createUser.password, 8)
+    let userPasswordHash
+    if (createUser.password) {
+      userPasswordHash = await bcrypt.hash(createUser.password, 8)
+    }
 
     const teste = await PrismaHelper.user.create({
       data: {
         id: createUser.id,
-        cpf: createUser.cpf,
+        githubId: createUser.githubId,
         name: createUser.name,
         email: createUser.email,
         phone: createUser.phone,
         password: userPasswordHash,
         birthDate: createUser.birthDate,
-        speciality: createUser.speciality,
         createdAt: createUser.createdAt
 
       }
