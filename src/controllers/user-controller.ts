@@ -13,7 +13,7 @@ import { type PasswordRecoveryUseCase } from '../usecases/user/password-recovery
 import { type DeleteUserUseCase } from '../usecases/user/delete-user/delete-user'
 import ApiError from '../utils/apiError'
 import axios from 'axios'
-import { type UserProps } from '../entities/user'
+import { User, type UserProps } from '../entities/user'
 // import fetch from 'node-fetch'
 
 export class UserController {
@@ -86,18 +86,23 @@ export class UserController {
         })
       }
       const user = await this.userLoginService.handle(email, password)
-      if (user && request.session) {
-        request.session.user = {}
-        const userId = user?.id
-        const token = jwt.sign({ userId }, process.env.TOKEN_SECRET!, {
-          expiresIn: '7d'
-        })
-        request.session.user = {
-          id: userId,
-          jwt: token
-        }
-        request.session.save()
+      console.log(user?.id)
+      // request.session.user = request.session.user ?? {}
+      // request.session.user.id = user?.id ?? ''
+      // console.log('sdasd', request.session)
+      //      request.session.user.jwt = jwt.sign({ userId: user?.id }, process.env.TOKEN_SECRET!, {
+      //        expiresIn: '7d'
+      //      })
+      const userId = user?.id
+      const token = jwt.sign({ userId }, process.env.TOKEN_SECRET!, {
+        expiresIn: '7d'
+      })
+      request.session.user = {
+        id: user?.id,
+        jwt: token
       }
+      // request.session.save()
+      // console.log(request.session)
 
       const { password: userPassword, ...userWithoutPassword } = user ?? {}
 
@@ -183,7 +188,7 @@ export class UserController {
           headers: {
             Authorization: `Bearer ${result.data.access_token}`
           }
-        }).then((result) => {
+        }).then(async (result) => {
           console.log(result.data)
           const data: UserProps = {
             name: result.data.name,
@@ -195,9 +200,39 @@ export class UserController {
             password: undefined,
             systemRole: 'CREATED'
           }
-          const httpResponse = this.createUserStudentUseCase.handle(
-            data, roleName
+          const user = new User(data)
+          console.log('sdasdasdasd', user)
+          const httpResponse = await this.createUserStudentUseCase.handle(
+            user, roleName
           )
+          // if (httpResponse && request.session) {
+          //   // request.session.user = request.session.user ?? {}
+          //   request.session.userId = user?.id || ''
+          //   request.session.jwt = jwt.sign({ userId: user?.id }, process.env.TOKEN_SECRET!, {
+          //     expiresIn: '7d'
+          //   })
+          //   const userId = data?.githubId
+          //   const token = jwt.sign({ userId }, process.env.TOKEN_SECRET!, {
+          //     expiresIn: '7d'
+          //   })
+          //   request.session.user = {
+          //     id: userId,
+          //     jwt: token
+          //   }
+          //   request.session.save()
+          //   console.log(request.session.user)
+          // }
+          request.session = request.session || {}
+          request.session.user = {}
+          const userId = user?.id
+          const token = jwt.sign({ userId }, process.env.TOKEN_SECRET!, {
+            expiresIn: '7d'
+          })
+          request.session.user = {
+            id: user?.id,
+            jwt: token
+          }
+          console.log(request.session.user)
           return response.status(201).json(httpResponse)
         }
         )
@@ -211,7 +246,7 @@ export class UserController {
         }
         throw new ApiError({
           code,
-          error: err
+          error: err.message
         })
       })
   }
