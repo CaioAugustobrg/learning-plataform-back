@@ -1,6 +1,6 @@
-import { type PasswordRecovery } from '../../../entities/password-recovery'
-import { type User } from '../../../entities/user'
-import { type PasswordRecoveryRepository } from '../../../usecases/ports/password-recovery-repository'
+import { type PasswordRecovery } from '../../../domain/entities/password-recovery'
+import { type User } from '../../../domain/entities/user'
+import { type PasswordRecoveryRepository } from '../../../domain/usecases/ports/password-recovery-repository'
 import { PrismaHelper } from './helpers/prisma-helper'
 
 export class PrismaPasswordRecoveryRepository implements PasswordRecoveryRepository {

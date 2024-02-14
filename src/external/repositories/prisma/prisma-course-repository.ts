@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Course } from '../../../entities/course'
-import { type CourseRepository } from '../../../usecases/ports/course-repository'
+import { Course } from '../../../domain/entities/course'
+import { type CourseRepository } from '../../../domain/usecases/ports/course-repository'
 import { PrismaHelper } from './helpers/prisma-helper'
 
 export class PrismaCourseRepository implements CourseRepository {

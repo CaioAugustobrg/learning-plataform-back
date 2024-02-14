@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { type UserRepository } from '../../../usecases/ports/user-repository'
-import { User } from '../../../entities/user'
+import { type UserRepository } from '../../../domain/usecases/ports/user-repository'
+import { User } from '../../../domain/entities/user'
 import { PrismaHelper } from '../prisma/helpers/prisma-helper'
 import bcrypt from 'bcrypt'
 
@@ -51,13 +51,18 @@ export class PrismaUserRepository implements UserRepository {
     })) as unknown as User | null
   }
 
+  async findUserByGithubId (githubId: string): Promise<User | null> {
+    return (PrismaHelper?.user?.findUnique({
+      where: { githubId }
+    })) as unknown as User | null
+  }
+
   async create (user: User, roleName: string): Promise<User | null> {
     const createUser = new User(user)
     let userPasswordHash
     if (createUser.password) {
       userPasswordHash = await bcrypt.hash(createUser.password, 8)
     }
-
     const teste = await PrismaHelper.user.create({
       data: {
         id: createUser.id,

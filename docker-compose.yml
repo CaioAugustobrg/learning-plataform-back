@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  learning-plataform-back-db:
+    image: postgres
+    restart: always
+    volumes:
+      - /var/lib/docker/volumes/learning-plataform-back-db
+    environment:
+      POSTGRES_PASSWORD: learning
+      POSTGRES_USER: postgres
+    ports:
+       - "5432:5432"
+
+

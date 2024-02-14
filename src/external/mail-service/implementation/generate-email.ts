@@ -1,6 +1,6 @@
 // EmailContent.ts
 import mjml2html from 'mjml'
-import { type IMessage } from '../../../usecases/ports/mail-service'
+import { type IMessage } from '../../../domain/usecases/ports/mail-service'
 
 export const generateWelcomeEmailToProfessorContent = (userEmail: string): IMessage => {
   const htmlOutput = mjml2html(`

@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 // import { setupExpressSession } from './main/config/express-session'
-import router from './main/routes/'
+import router from './routes'
 import express from 'express'
 import session from 'express-session'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import redisClient from './main/config/redis-client'
+import redisClient from './config/redis-client'
 import connectRedis from 'connect-redis'
 const RedisStore = connectRedis(session)
 const redisStoreInstance = new RedisStore({ client: redisClient })
