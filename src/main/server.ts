@@ -20,15 +20,16 @@ app.listen(port, async () => {
       const responseToJson = JSON.parse(response)
       console.log(responseToJson)
       const emailContent: IMessage = generateWelcomeEmailToStudentContent(responseToJson.email)
-      // const emailData = {
-      //   to: responseToJson.email,
-      //   from: responseToJson.from,
-      //   subject: responseToJson.subject
-      //   // html: new DOMParser().parseFromString(responseToJson.html, 'text/html')
-      // }
-      console.log('server', emailContent)
+      const emailData: IMessage = {
+        to: responseToJson.email,
+        from: emailContent.from,
+        subject: emailContent.subject,
+        html: emailContent.html,
+        amp: emailContent.amp
+      }
+      console.log('server', emailData)
       const emailSender = new EmailSender(process.env.SENDGRID_API_KEY!)
-      await emailSender.sendEmail(emailContent)
+      await emailSender.sendEmail(emailData)
     }
     )
     console.log(`Express started on http://127.0.0.1:${port}; press CTRL + C to terminate.`)
