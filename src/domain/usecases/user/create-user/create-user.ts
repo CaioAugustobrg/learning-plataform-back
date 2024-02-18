@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import ApiError from '../../../utils/apiError'
+import ApiError from '../../../../utils/apiError'
 import { User } from '../../../entities/user'
-import { type PrismaUserRepository } from '../../../external/repositories/prisma/prisma-user-repository'
-import type EmailSender from '../../../external/mail-service/implementation/sendGridMailProvider'
+import { type PrismaUserRepository } from '../../../../external/repositories/prisma/prisma-user-repository'
+import type EmailSender from '../../../../external/mail-service/implementation/sendGridMailProvider'
 import { type IMessage } from '../../ports/mail-service'
 import { type UserProps } from '../../../entities/user'
-import { generateWelcomeEmailToProfessorContent, generateWelcomeEmailToStudentContent } from '../../../external/mail-service/implementation/generate-email'
+import { generateWelcomeEmailToProfessorContent } from '../../../../external/mail-service/implementation/generate-email'
+import RabbitmqClient from '../../../../main/config/rabbit-mq-client'
 
 export class CreateUserUseCase {
   constructor (
@@ -55,8 +57,15 @@ export class CreateUserUseCase {
       if (roleName === 'student') {
         const user = new User(userProps)
         await this.prismaUserRepository.create(user, roleName)
-        const emailContent: IMessage = generateWelcomeEmailToStudentContent(user.email)
-        await this.emailSender.sendEmail(emailContent)
+        const rabbitmqClient = new RabbitmqClient(process.env.RABBITMQ_URL ?? 'amqp://localhost:5673')
+        await rabbitmqClient.start()
+        const userData = {
+          email: user.email,
+          name: user.name
+        }
+        await rabbitmqClient.publishInQueue('email-queue', JSON.stringify(userData))
+        // const emailContent: IMessage = generateWelcomeEmailToStudentContent(user.email)
+        // await this.emailSender.sendEmail(emailContent)
         return null
       } else {
         const userRegisterDocumentAlreadyExists =
