@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 // main.ts
 import { type IMessage } from '../domain/usecases/ports/mail-service'
-import { generateWelcomeEmailToStudentContent } from '../external/mail-service/implementation/generate-email'
+import { generatePasswordRecoveryEmail, generateWelcomeEmailToStudentContent } from '../external/mail-service/implementation/generate-email'
 import EmailSender from '../external/mail-service/implementation/sendGridMailProvider'
 import app from './config/app'
 import RabbitmqClient from './config/rabbit-mq-client'
@@ -13,13 +13,15 @@ const port = 3030
 
 app.listen(port, async () => {
   try {
+    let emailContent: IMessage
     const server = new RabbitmqClient(process.env.RABBITMQ_URL!)
     await server.start()
     await server.consume('email-queue', async (message: any) => {
       const response = message.content.toString()
       const responseToJson = JSON.parse(response)
       console.log(responseToJson)
-      const emailContent: IMessage = generateWelcomeEmailToStudentContent(responseToJson.email)
+      responseToJson.userToken !== null ? emailContent = generateWelcomeEmailToStudentContent(responseToJson.email) : emailContent = generatePasswordRecoveryEmail(responseToJson.email)
+      // const emailContent: IMessage = generateWelcomeEmailToStudentContent(responseToJson.email) ?? 's'
       const emailData: IMessage = {
         to: responseToJson.email,
         from: emailContent.from,
@@ -32,6 +34,7 @@ app.listen(port, async () => {
       await emailSender.sendEmail(emailData)
     }
     )
+
     console.log(`Express started on http://127.0.0.1:${port}; press CTRL + C to terminate.`)
   } catch (error) {
     console.error('Error connecting to Redis:', error)
